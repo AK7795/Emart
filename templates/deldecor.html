@@ -1,0 +1,23 @@
+{% extends "base1.html" %}
+{% block content %}
+<h1>  Welcome {{session.name}} </h1>
+    <h1>Home decor  delete </h1>
+        <div class="container container">
+            <div class="row">
+                <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xl-12 col-xxl-12">
+                    <form action="" method="post">
+                      <table class="table table-borderless">
+                        <tr>
+                            <td>Enter product name</td>
+                            <td> <input name="namedel" type = "text" class="form-control"> </td>
+                        </tr>
+                        <tr>
+                            <td><button class = "btn btn-danger">Delete</button></td>
+                        </tr>
+                    </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base1.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+      {% for i in groc1 %}
+      <div class="col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+          <div class="card" style="width: 18rem;">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1xYCqoil43Qq8bUd9JJM-nPLxpeVo_uCp8A&usqp=CAU" class="card-img-top" alt="img not available">
+              <div class="card-body">
+                <h5 class="card-title"><center>{{i[1]}}</center></h5>
+
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">details : {{i[2]}}</li>
+                <li class="list-group-item">price : {{i[3]}}</li>
+              </ul>
+              <a href="" class="btn btn-success" type="submit">Buy now</a>&emsp;
+              <a href="" class="btn btn-warning" type="submit" >Add to cart</a>
+
+            </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+
+   {% endblock %}
