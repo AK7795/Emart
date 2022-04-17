@@ -6,7 +6,7 @@
 <div class="container container">
     <div class="row">
         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xl-12 col-xxl-12"> 
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 <table class="table table-borderless">
                     <tr>
                         <td>book name</td>
@@ -23,6 +23,10 @@
                     <tr>
                         <td>price</td>
                         <td><input name="price" class = "form-control" type="text"> </td>
+                    </tr>
+                    <tr>
+                        <td>add image</td>
+                        <td><input name="bookpic" class = "form-control" type="file" id="bookpic"> </td>
                     </tr>
                     <tr>
                         <td><center><button  class="btn btn-success"type = "submit" >Add</button></center></td>

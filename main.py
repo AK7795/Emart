@@ -1,4 +1,7 @@
+import os
 from flask import Flask, render_template, request, redirect, session
+from werkzeug.utils import secure_filename
+
 from flask_session import Session
 
 import sqlite3
@@ -22,7 +25,7 @@ if listOfTables2!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE BOOKS1(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    BOOKNAME TEXT,AUTHORNAME TEXT ,DETAILS TEXT,PRICE TEXT); ''')
+                    BOOKNAME TEXT,AUTHORNAME TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
 
 
 listOfTables3 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='ELECTRONICS' ").fetchall()
@@ -31,7 +34,7 @@ if listOfTables3!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE ELECTRONICS(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    PRODUCTNAME TEXT,COMPANY TEXT ,DETAILS TEXT,PRICE TEXT); ''')
+                    PRODUCTNAME TEXT,COMPANY TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
 
 
 listOfTables4 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='GROCERY' ").fetchall()
@@ -40,7 +43,7 @@ if listOfTables4!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE GROCERY(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                   ITEMNAME TEXT,DETAILS TEXT,PRICE TEXT); ''')
+                   ITEMNAME TEXT,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
 
 
 listOfTables5 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='HOMEDECOR' ").fetchall()
@@ -49,7 +52,7 @@ if listOfTables5!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE HOMEDECOR(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    PRODUCTNAME TEXT,DETAILS TEXT,PRICE TEXT); ''')
+                    PRODUCTNAME TEXT,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
 
 
 listOfTables6 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='MOBILES' ").fetchall()
@@ -58,15 +61,15 @@ if listOfTables6!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE MOBILES(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    NAME TEXT,BRAND TEXT ,DETAILS TEXT,PRICE TEXT); ''')
+                    NAME TEXT,BRAND TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
 
 
 app = Flask(__name__)
 
-cur2 = con.cursor()
-cur2.execute("SELECT EMAILID,PASSWORD FROM SELLER")
-res2 = cur2.fetchall()
-print(res2)
+curo = con.cursor()
+curo.execute("SELECT EMAILID,PASSWORD FROM SELLER")
+resul = curo.fetchall()
+print(resul)
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -86,7 +89,6 @@ def seller():
         return render_template("sellerpage.html")
 
 
-
 @app.route("/addbooks", methods=['GET', 'POST'])
 def addbook():
     if not session.get("name"):
@@ -98,20 +100,24 @@ def addbook():
             getdetails = request.form["cat"]
             getPrice = request.form["price"]
 
+            f1 = request.files['bookpic']
+            pic = secure_filename(f1.filename)
+            f1.save(os.path.join('static', pic))
+            f1.save(pic)
+
             print(getBookName)
             print(getAuthor)
             print(getdetails)
             print(getPrice)
             try:
                 con.execute(
-                    "INSERT INTO BOOKS1(BOOKNAME,AUTHORNAME,DETAILS,PRICE) VALUES('" + getBookName + "','" + getAuthor + "','" + getdetails + "','" + getPrice + "')")
+                    "INSERT INTO BOOKS1(BOOKNAME,AUTHORNAME,DETAILS,PRICE,IMAGE) VALUES('" + getBookName + "','" + getAuthor + "','" + getdetails + "','" + getPrice + "','"+pic+"')")
                 print("successfully inserted !")
                 con.commit()
                 return redirect("/books")
             except Exception as e:
                 print(e)
         return render_template("addbooks.html")
-
 
 
 @app.route("/delbooks", methods=["GET", "POST"])
@@ -126,7 +132,6 @@ def delbooks():
             con.commit()
             return redirect("/books")
         return render_template("delbooks.html")
-
 
 
 @app.route("/adddecor", methods=['GET', 'POST'])
@@ -153,7 +158,6 @@ def adddecor():
         return render_template("adddecor.html")
 
 
-
 @app.route("/deldecor", methods=["GET", "POST"])
 def deldecor():
     if not session.get("name"):
@@ -165,7 +169,6 @@ def deldecor():
             cur3.execute("DELETE FROM HOMEDECOR WHERE PRODUCTNAME = '" + getNAMEDEL + "' ")
             return redirect("/decorate")
         return render_template("deldecor.html")
-
 
 
 @app.route("/addmob", methods=['GET', 'POST'])
@@ -207,7 +210,6 @@ def delmob():
         return render_template("delmob.html")
 
 
-
 @app.route("/addele", methods=['GET', 'POST'])
 def addele():
     if not session.get("name"):
@@ -235,7 +237,6 @@ def addele():
         return render_template("addele.html")
 
 
-
 @app.route("/delele", methods=["GET", "POST"])
 def delele():
     if not session.get("name"):
@@ -247,7 +248,6 @@ def delele():
             cur3.execute("DELETE FROM ELECTRONICS WHERE PRODUCTNAME = '" + getNAMEDEL + "' ")
             return redirect("/mobiles")
         return render_template("delele.html")
-
 
 
 @app.route("/addgro", methods=['GET', 'POST'])
@@ -275,7 +275,6 @@ def addgro():
         return render_template("addgro.html")
 
 
-
 @app.route("/delgro", methods=["GET", "POST"])
 def delgro():
     if not session.get("name"):
@@ -287,7 +286,6 @@ def delgro():
             cur3.execute("DELETE FROM GROCERY WHERE ITEMNAME = '" + getNAMEDEL + "' ")
             return redirect("/grocery")
         return render_template("delgro.html")
-
 
 
 @app.route("/sellerlogin", methods=['GET', 'POST'])
@@ -381,6 +379,94 @@ def books():
     cur.execute("SELECT * FROM BOOKS1")
     res = cur.fetchall()
     return render_template("books.html", books=res)
+
+
+@app.route("/singleproductgro")
+def singleproductgro():
+    getId = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM GROCERY WHERE ID ="+getId)
+    res = cur.fetchall()
+    return render_template("viewsingleproductgro.html", groc1=res)
+
+
+@app.route("/singleproductmob")
+def singleproductmob():
+    getID = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM MOBILES WHERE ID="+getID)
+    res = cur.fetchall()
+    return render_template("viewsingleproductmob.html", mob1=res)
+
+
+@app.route("/singleproductele")
+def singleproductele():
+    getID = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM ELECTRONICS WHERE ID="+getID)
+    res = cur.fetchall()
+    return render_template("viewsingleproductele.html", elec1=res)
+
+
+@app.route("/singleproductdecor")
+def singleproductdecor():
+    getID = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM HOMEDECOR WHERE ID=" +getID)
+    res = cur.fetchall()
+    return render_template("viewsingleproductdecor.html", decor1=res)
+
+
+@app.route("/singleproductbooks")
+def singleproductbooks():
+    getID = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM BOOKS1 WHERE ID="+getID)
+    res = cur.fetchall()
+    return render_template("viewsingleproductbooks.html", books=res)
+
+
+@app.route("/searchpage", methods=['POST'])
+def searchbook():
+    if request.method == 'POST':
+        sear = request.form['searchproduct']
+
+        cur = con.cursor()
+        cur.execute("SELECT * FROM BOOKS1 WHERE BOOKNAME LIKE  '%"+sear+"%'  ")
+        res1 = cur.fetchall()
+
+        cur2 = con.cursor()
+        cur2.execute("SELECT * FROM GROCERY WHERE ITEMNAME LIKE  '%" + sear + "%'  ")
+        res2 = cur2.fetchall()
+
+        cur3 = con.cursor()
+        cur3.execute("SELECT * FROM HOMEDECOR WHERE PRODUCTNAME LIKE  '%" + sear + "%'  ")
+        res3 = cur3.fetchall()
+
+        cur4 = con.cursor()
+        cur4.execute("SELECT * FROM ELECTRONICS WHERE PRODUCTNAME LIKE  '%" + sear + "%'  ")
+        res4 = cur4.fetchall()
+
+        cur5 = con.cursor()
+        cur5.execute("SELECT * FROM MOBILES WHERE NAME LIKE  '%" + sear + "%'  ")
+        res5 = cur5.fetchall()
+
+        print(res1)
+        print(res2)
+        if len(res1) > 0:
+            return render_template("searchbook.html", searchbook=res1)
+
+        if len(res2) > 0:
+            return render_template("searchgro.html", searchgro=res2)
+
+        if len(res5) > 0:
+            return render_template("searchmob.html", searchmob=res5)
+
+        if len(res4) > 0:
+            return render_template("searchele.html", searchele=res4)
+
+        if len(res3) > 0:
+            return render_template("searchdecor.html", searchdecor=res3)
 
 
 if __name__ == "__main__":
