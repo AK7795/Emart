@@ -679,14 +679,18 @@ con.commit()
 '''
 
 
-@app.route("/myorders")
-def myorders():
-    cur = con.cursor()
-    cur.execute("SELECT * FROM ORDERSS ")
-    res2 = cur.fetchall()
-    print(res2)
+@app.route("/myorders", methods=["GET","POST"])
+def myorder():
 
-    return render_template("myorders.html", orders=res2)
+    if request.method == 'POST':
+        getnumber = request.form["number"]
+        cur = con.cursor()
+        cur.execute("SELECT * FROM ORDERSS WHERE PHONE = "+getnumber)
+        res = cur.fetchall()
+        print(res)
+        return render_template("myorders.html", detail=res)
+
+    return render_template("myorders.html")
 
 
 @app.route("/adminlogin", methods=['GET', 'POST'])
@@ -734,9 +738,14 @@ def uslogin():
         cursor.execute("SELECT * FROM USERS WHERE EMAILID = '" + getemail + "' AND PASSWORD = '" + getpassword + "'  ")
         res2 = cursor.fetchall()
         if len(res2) > 0:
-            return redirect("/myorders")
+            return redirect("/userpage")
 
     return render_template("userlogin.html")
+
+
+@app.route("/userpage")
+def userpage():
+    return render_template("user.html")
 
 
 @app.route("/userrregistration", methods=['GET', 'POST'])

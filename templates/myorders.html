@@ -1,8 +1,21 @@
-
 {% extends "base1.html" %}
 {% block content %}
 
-<div class="container" style="color: rgb(0, 0, 0);">
+<h3 style="text-align: center; ">  Welcome  ! </h3><br>
+<h3 style="text-align: center;">Your Order </h3><br>
+<form action="" method="post">
+  <table class="table table-borderless">
+      <tr>
+          <td><b>Enter Phone number</b></td>
+          <td><input name="number" class = "form-control" type="text" > </td>
+      </tr>
+  </table>
+  <br>
+  <center><button class="btn btn-success" type="submit" >confirm</button></center>
+</form>   
+  <br><br>
+
+  <div class="container" style="color: rgb(0, 0, 0);">
     <div class="row">
         <div class="col col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
 
@@ -16,12 +29,11 @@
                         <th scope="col">pincode</th>
                         <th scope="col">payment mode</th>
                         <th scope="col">item ordered</th>
-                        <th scope="col">amount</th>
                         
                     </tr>
                 </thead>
                 <tbody style="color: rgb(0, 0, 0);">
-                    {% for i in orders %}
+                    {% for i in detail %}
                     <tr>
                         <th scope="row">{{i[1]}}</th>
                             <td>{{i[2]}}</td>
@@ -30,7 +42,6 @@
                             <td>{{i[5]}}</td>
                             <td>{{i[6]}}</td>
                             <td>{{i[7]}}</td>
-                            <td>{{i[8]}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -40,4 +51,6 @@
 </div>
 
 
-   {% endblock %}
+<br><br><br>
+
+{% endblock %}
