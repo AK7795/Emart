@@ -1,0 +1,78 @@
+{% extends "base1.html" %}
+{% block content %}
+<h1 style="text-align: center; ">  Welcome ! </h1><br>
+<h3 style="text-align: center;">Your Order!!</h3><br>
+
+<div class="container">
+  <div class="row">
+      {% for i in books %}
+      <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+          <div class="card mb-3" style="max-width: 1260px;">
+              <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src='/static/{{i[5]}}' alt="Generic placeholder image"> 
+                  </div>
+                  <div class="col-md-8">
+                      <div class="card-body">
+                          <h5 class="card-title"><center>{{i[1]}}</center></h5>
+
+                      </div>
+                      <ul class="list-group list-group-flush">
+                          <li class="list-group-item">brand : {{i[2]}}</li>
+                          <li class="list-group-item">details : {{i[3]}}</li>
+                          <li class="list-group-item">price : {{i[4]}}</li>
+                      </ul>
+                      <br>
+
+                  </div>
+              </div>
+
+          </div>
+          <form action="" method="post">
+                <table class="table table-borderless">
+                    <tr>
+                        <td>Name</td>
+                        <td><input name="name" class = "form-control" type="text"> </td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><input name="email" class = "form-control" type="text"> </td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td><input name="phone" class = "form-control" type="number"> </td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td><input name="add" class="form-control" type="text"></td>
+
+                    </tr>
+                    <tr>
+                        <td>Pincode</td>
+                        <td><input name="pin" class="form-control" type="number"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                          <label for="payment">Choose payment method :</label>
+                          <select name="payment" id="payment">
+                            
+                            
+                            <option value="COD">COD</option>\
+                            <option value="INSTAMOJO">INSTAMOJO</option>
+                          </select>
+                        </td>
+                        
+                      </tr>
+
+                    <tr>
+                        <td><button  class="btn btn-success" type = "submit" >confirm</button></td>
+                    </tr>
+                    </table>
+            </form>
+
+      </div>
+      {% endfor %}
+  </div>
+</div>
+   {% endblock %}

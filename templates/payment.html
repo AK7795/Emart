@@ -1,0 +1,88 @@
+{% extends "base1.html" %}
+{% block content %}
+
+<h3 style="text-align: center; ">  Welcome  ! </h3><br>
+<h3 style="text-align: center;">Your Order </h3><br>
+<form action="" method="post">
+  <table class="table table-borderless">
+      <tr>
+          <td><b>Enter Phone number</b></td>
+          <td><input name="number" class = "form-control" type="text" > </td>
+      </tr>
+  </table>
+  <center><button class="btn btn-success" type="submit" >confirm</button></center>
+</form>   
+  <br><br>
+
+<div class="container">
+  <div class="row">
+    {% for i in detail %}
+
+    <h5>
+    NAME :{{i[1]}} &emsp;<br><br>
+    EMAIL :{{i[2]}} &emsp;<br><br>
+    PHONE :{{i[3]}} &emsp;<br><br>
+    ADDRESS :{{i[4]}} &emsp;<br><br>
+    PINCODE :{{i[5]}} &emsp;<br><br>
+    MODE OF PAYMENT :{{i[6]}} &emsp;<br><br>
+    ITEM ORDERED :{{i[7]}} &emsp;<br><br>
+    AMOUNT :{{i[8]}} &emsp;<br><br>
+    </h5>
+<br><br>
+<form action="/pay" method="POST">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            required
+            name="name"
+            placeholder="name"
+            value="{{i[1]}}"
+          />
+        </div>
+        <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              required
+              name="product"
+              placeholder="product"
+              value="{{i[7]}}"
+            />
+          </div>
+        <div class="form-group">
+          <input
+            type="email"
+            class="form-control"
+            required
+            name="email"
+            placeholder="email"
+            value="{{i[2]}}"
+          />
+        </div>
+        <div class="form-group">
+            <input
+              type="number"
+              class="form-control"
+              required
+              name="amount"
+              placeholder="amount"
+              value="{{i[8]}}"
+            />
+          </div>
+       
+      </form>
+
+</div>
+</div>
+    {% endfor %}
+
+
+
+<br><br><br>
+<center><a href="/pay"><button type="submit" class="btn btn-danger btn-block" >
+  Create Payment Link
+</button></a>
+<br><br><br><br><br></center>
+
+{% endblock %}

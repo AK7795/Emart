@@ -1,10 +1,17 @@
 import os
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
-
+from instamojo_wrapper import Instamojo
 from flask_session import Session
 
 import sqlite3
+
+API_KEY = "test_4387b23fc264616d0291ee454a7"
+
+AUTH_TOKEN = "test_00e09b762c2b5333325799cc455"
+
+api = Instamojo(api_key=API_KEY, auth_token=AUTH_TOKEN, endpoint='https://test.instamojo.com/api/1.1/')
+
 
 con = sqlite3.connect("Login.db", check_same_thread=False)
 cursor = con.cursor()
@@ -25,7 +32,7 @@ if listOfTables2!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE BOOKS1(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    BOOKNAME TEXT,AUTHORNAME TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
+                    BOOKNAME TEXT,AUTHORNAME TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE TEXT); ''')
 
 
 listOfTables3 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='ELECTRONICS' ").fetchall()
@@ -34,7 +41,7 @@ if listOfTables3!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE ELECTRONICS(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    PRODUCTNAME TEXT,COMPANY TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
+                    PRODUCTNAME TEXT,COMPANY TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE TEXT); ''')
 
 
 listOfTables4 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='GROCERY' ").fetchall()
@@ -43,7 +50,7 @@ if listOfTables4!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE GROCERY(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                   ITEMNAME TEXT,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
+                   ITEMNAME TEXT,DETAILS TEXT,PRICE TEXT,IMAGE TEXT); ''')
 
 
 listOfTables5 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='HOMEDECOR' ").fetchall()
@@ -52,7 +59,7 @@ if listOfTables5!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE HOMEDECOR(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    PRODUCTNAME TEXT,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
+                    PRODUCTNAME TEXT,DETAILS TEXT,PRICE TEXT,IMAGE TEXT); ''')
 
 
 listOfTables6 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='MOBILES' ").fetchall()
@@ -61,15 +68,37 @@ if listOfTables6!=[]:
     print("Table Already Exists ! ")
 else:
     con.execute('''CREATE TABLE MOBILES(ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    NAME TEXT,BRAND TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE BLOB); ''')
+                    NAME TEXT,BRAND TEXT ,DETAILS TEXT,PRICE TEXT,IMAGE TEXT); ''')
+
+
+listOfTables7 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='ORDERSS' ").fetchall()
+
+if listOfTables7!=[]:
+    print("Table Already Exists ! ")
+else:
+    con.execute('''CREATE TABLE ORDERSS(ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            NAME TEXT,EMAIL TEXT ,PHONE INTEGER, ADDRESS TEXT,PINCODE INTEGER, MODEOFPAYMENT TEXT,ITEMORDERED TEXT); ''')
+
+
+listOfTables8 = con.execute("SELECT NAME FROM sqlite_master WHERE type='table' And name='USERS' ").fetchall()
+
+if listOfTables8!=[]:
+    print("Table Already Exists ! ")
+else:
+    con.execute('''CREATE TABLE USERS(ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            FIRSTNAME TEXT,LASTNAME TEXT ,MOBILENUMBER TEXT,EMAILID TEXT,PASSWORD TEXT); ''')
 
 
 app = Flask(__name__)
 
 curo = con.cursor()
-curo.execute("SELECT EMAILID,PASSWORD FROM SELLER")
+curo.execute("SELECT * FROM ORDERSS")
 resul = curo.fetchall()
 print(resul)
+
+#con.execute("ALTER TABLE ORDERSS ADD COLUMN AMOUNT TEXT")
+con.commit()
+
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -144,12 +173,16 @@ def adddecor():
             getdetails = request.form["det"]
             getPrice = request.form["price"]
 
+            f2 = request.files['decorpic']
+            pic2 = secure_filename(f2.filename)
+            f2.save(os.path.join('static', pic2))
+            f2.save(pic2)
             print(getName)
             print(getdetails)
             print(getPrice)
             try:
                 con.execute(
-                    "INSERT INTO HOMEDECOR(PRODUCTNAME,DETAILS,PRICE) VALUES('" + getName + "','" + getdetails + "','" + getPrice + "')")
+                    "INSERT INTO HOMEDECOR(PRODUCTNAME,DETAILS,PRICE,IMAGE) VALUES('" + getName + "','" + getdetails + "','" + getPrice + "','"+pic2+"')")
                 print("successfully inserted !")
                 con.commit()
                 return redirect("/decorate")
@@ -167,6 +200,7 @@ def deldecor():
             getNAMEDEL = request.form["namedel"]
             cur3 = con.cursor()
             cur3.execute("DELETE FROM HOMEDECOR WHERE PRODUCTNAME = '" + getNAMEDEL + "' ")
+            con.commit()
             return redirect("/decorate")
         return render_template("deldecor.html")
 
@@ -182,13 +216,18 @@ def addmob():
             getdetails = request.form["det"]
             getPrice = request.form["price"]
 
+            f3 = request.files['mobpic']
+            pic3 = secure_filename(f3.filename)
+            f3.save(os.path.join('static', pic3))
+            f3.save(pic3)
+
             print(getName)
             print(getBrand)
             print(getdetails)
             print(getPrice)
             try:
                 con.execute(
-                    "INSERT INTO MOBILES(NAME,BRAND,DETAILS,PRICE) VALUES('" + getName + "','" + getBrand + "','" + getdetails + "','" + getPrice + "')")
+                    "INSERT INTO MOBILES(NAME,BRAND,DETAILS,PRICE,IMAGE) VALUES('" + getName + "','" + getBrand + "','" + getdetails + "','" + getPrice + "','"+pic3+"')")
                 print("successfully inserted !")
                 con.commit()
                 return redirect("/mobiles")
@@ -206,6 +245,7 @@ def delmob():
             getNAMEDEL = request.form["namedel"]
             cur3 = con.cursor()
             cur3.execute("DELETE FROM MOBILES WHERE NAME = '" + getNAMEDEL + "' ")
+            con.commit()
             return redirect("/mobiles")
         return render_template("delmob.html")
 
@@ -221,6 +261,11 @@ def addele():
             getdetails = request.form["det"]
             getPrice = request.form["price"]
 
+            f4 = request.files['elepic']
+            pic4 = secure_filename(f4.filename)
+            f4.save(os.path.join('static', pic4))
+            f4.save(pic4)
+
             print(getName)
             print(getComp)
             print(getdetails)
@@ -228,7 +273,7 @@ def addele():
 
             try:
                 con.execute(
-                    "INSERT INTO ELECTRONICS(PRODUCTNAME,COMPANY,DETAILS,PRICE) VALUES('" + getName + "','" + getComp + "','" + getdetails + "','" + getPrice + "')")
+                    "INSERT INTO ELECTRONICS(PRODUCTNAME,COMPANY,DETAILS,PRICE,IMAGE) VALUES('" + getName + "','" + getComp + "','" + getdetails + "','" + getPrice + "','"+pic4+"')")
                 print("successfully inserted !")
                 con.commit()
                 return redirect("/electronics")
@@ -246,7 +291,8 @@ def delele():
             getNAMEDEL = request.form["namedel"]
             cur3 = con.cursor()
             cur3.execute("DELETE FROM ELECTRONICS WHERE PRODUCTNAME = '" + getNAMEDEL + "' ")
-            return redirect("/mobiles")
+            con.commit()
+            return redirect("/electronics")
         return render_template("delele.html")
 
 
@@ -260,13 +306,18 @@ def addgro():
             getdetails = request.form["det"]
             getPrice = request.form["price"]
 
+            f5 = request.files['gropic']
+            pic5 = secure_filename(f5.filename)
+            f5.save(os.path.join('static', pic5))
+            f5.save(pic5)
+
             print(getName)
             print(getdetails)
             print(getPrice)
 
             try:
                 con.execute(
-                    "INSERT INTO GROCERY(ITEMNAME,DETAILS,PRICE) VALUES('" + getName + "','" + getdetails + "','" + getPrice + "')")
+                    "INSERT INTO GROCERY(ITEMNAME,DETAILS,PRICE,IMAGE) VALUES('" + getName + "','" + getdetails + "','" + getPrice + "','"+pic5+"')")
                 print("successfully inserted !")
                 con.commit()
                 return redirect("/grocery")
@@ -284,6 +335,7 @@ def delgro():
             getNAMEDEL = request.form["namedel"]
             cur3 = con.cursor()
             cur3.execute("DELETE FROM GROCERY WHERE ITEMNAME = '" + getNAMEDEL + "' ")
+            con.commit()
             return redirect("/grocery")
         return render_template("delgro.html")
 
@@ -335,7 +387,7 @@ def register():
 def logout():
 
     if not session.get("name"):
-        return redirect("/sellerlogin")
+        return redirect("/")
     else:
         session["name"] = None
         return redirect("/")
@@ -381,53 +433,8 @@ def books():
     return render_template("books.html", books=res)
 
 
-@app.route("/singleproductgro")
-def singleproductgro():
-    getId = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM GROCERY WHERE ID ="+getId)
-    res = cur.fetchall()
-    return render_template("viewsingleproductgro.html", groc1=res)
-
-
-@app.route("/singleproductmob")
-def singleproductmob():
-    getID = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM MOBILES WHERE ID="+getID)
-    res = cur.fetchall()
-    return render_template("viewsingleproductmob.html", mob1=res)
-
-
-@app.route("/singleproductele")
-def singleproductele():
-    getID = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM ELECTRONICS WHERE ID="+getID)
-    res = cur.fetchall()
-    return render_template("viewsingleproductele.html", elec1=res)
-
-
-@app.route("/singleproductdecor")
-def singleproductdecor():
-    getID = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM HOMEDECOR WHERE ID=" +getID)
-    res = cur.fetchall()
-    return render_template("viewsingleproductdecor.html", decor1=res)
-
-
-@app.route("/singleproductbooks")
-def singleproductbooks():
-    getID = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM BOOKS1 WHERE ID="+getID)
-    res = cur.fetchall()
-    return render_template("viewsingleproductbooks.html", books=res)
-
-
 @app.route("/searchpage", methods=['POST'])
-def searchbook():
+def search():
     if request.method == 'POST':
         sear = request.form['searchproduct']
 
@@ -451,8 +458,7 @@ def searchbook():
         cur5.execute("SELECT * FROM MOBILES WHERE NAME LIKE  '%" + sear + "%'  ")
         res5 = cur5.fetchall()
 
-        print(res1)
-        print(res2)
+
         if len(res1) > 0:
             return render_template("searchbook.html", searchbook=res1)
 
@@ -467,6 +473,328 @@ def searchbook():
 
         if len(res3) > 0:
             return render_template("searchdecor.html", searchdecor=res3)
+
+
+@app.route("/buygrocery", methods=['GET', 'POST'])
+def buygrocery():
+    getId = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM GROCERY WHERE ID=" + getId)
+    res = cur.fetchall()
+
+    c1 = con.cursor()
+    c1.execute("SELECT ITEMNAME,PRICE FROM GROCERY  WHERE ID =" + getId)
+    r1 = c1.fetchall()
+    print(r1)
+    if request.method == "POST":
+        getName = request.form["bname"]
+        getEmail = request.form["email"]
+        getPhone = request.form["phone"]
+        getAddress = request.form["add"]
+        getPincode = request.form["pin"]
+        getModeofpayment = request.form["payment"]
+
+        print(getName)
+        print(getEmail)
+        print(getPhone)
+        print(getAddress)
+        print(getPincode)
+        print(getModeofpayment)
+
+        con.execute(
+            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+            r1[0][0] + "','"+r1[0][1]+"')")
+        print("successfully inserted !")
+        con.commit()
+        if getModeofpayment == "INSTAMOJO":
+            return redirect("/payment")
+
+        if getModeofpayment == "COD":
+            return redirect("/success")
+
+    return render_template("buygrocery.html", groc1=res)
+
+
+@app.route("/buymobiles",methods=['GET', 'POST'])
+def buymobiles():
+    getId = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM MOBILES WHERE ID=" + getId)
+    res = cur.fetchall()
+
+    c1 = con.cursor()
+    c1.execute("SELECT NAME,PRICE FROM MOBILES  WHERE ID =" + getId)
+    r1 = c1.fetchall()
+    print(r1[0][0])
+    if request.method == "POST":
+        getName = request.form["name"]
+        getEmail = request.form["email"]
+        getPhone = request.form["phone"]
+        getAddress = request.form["add"]
+        getPincode = request.form["pin"]
+        getModeofpayment = request.form["payment"]
+
+        print(getName)
+        print(getEmail)
+        print(getPhone)
+        print(getAddress)
+        print(getPincode)
+        print(getModeofpayment)
+
+        con.execute(
+            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+            r1[0][0] + "','"+r1[0][1]+"')")
+        print("successfully inserted !")
+        con.commit()
+        if getModeofpayment == "INSTAMOJO":
+            return redirect("/payment")
+
+        if getModeofpayment == "COD":
+            return redirect("/success")
+
+    return render_template("buymobiles.html", mob1=res)
+
+
+@app.route("/buyelectronics",methods=['GET', 'POST'])
+def buyelectronics():
+    getId = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM ELECTRONICS WHERE ID=" + getId)
+    res = cur.fetchall()
+
+    c1 = con.cursor()
+    c1.execute("SELECT PRODUCTNAME,PRICE FROM ELECTRONICS  WHERE ID =" + getId)
+    r1 = c1.fetchall()
+    print(r1[0][0])
+    if request.method == "POST":
+        getName = request.form["name"]
+        getEmail = request.form["email"]
+        getPhone = request.form["phone"]
+        getAddress = request.form["add"]
+        getPincode = request.form["pin"]
+        getModeofpayment = request.form["payment"]
+
+        print(getName)
+        print(getEmail)
+        print(getPhone)
+        print(getAddress)
+        print(getPincode)
+        print(getModeofpayment)
+
+        con.execute(
+            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+            r1[0][0] + "'.'"+r1[0][1]+"')")
+        print("successfully inserted !")
+        con.commit()
+        if getModeofpayment == "INSTAMOJO":
+            return redirect("/payment")
+
+        if getModeofpayment == "COD":
+            return redirect("/success")
+
+    return render_template("buyelectronics.html", elec1=res)
+
+
+@app.route("/buydecor",methods=['GET', 'POST'])
+def buydecor():
+    getId = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM HOMEDECOR WHERE ID=" + getId)
+    res = cur.fetchall()
+
+    c1 = con.cursor()
+    c1.execute("SELECT PRODUCTNAME,PRICE FROM HOMEDECOR  WHERE ID =" + getId)
+    r1 = c1.fetchall()
+    print(r1[0][0])
+    if request.method == "POST":
+        getName = request.form["name"]
+        getEmail = request.form["email"]
+        getPhone = request.form["phone"]
+        getAddress = request.form["add"]
+        getPincode = request.form["pin"]
+        getModeofpayment = request.form["payment"]
+
+        print(getName)
+        print(getEmail)
+        print(getPhone)
+        print(getAddress)
+        print(getPincode)
+        print(getModeofpayment)
+
+        con.execute(
+            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+            r1[0][0] + "','"+r1[0][1]+"')")
+        print("successfully inserted !")
+        con.commit()
+        if getModeofpayment == "INSTAMOJO":
+            return redirect("/payment")
+
+        if getModeofpayment == "COD":
+            return redirect("/success")
+
+    return render_template("buydecor.html", decor1=res)
+
+
+@app.route("/buybooks", methods=['GET', 'POST'])
+def buybooks():
+    getId = request.args.get('id')
+    cur = con.cursor()
+    cur.execute("SELECT * FROM BOOKS1 WHERE ID=" + getId)
+    res = cur.fetchall()
+
+    c1 = con.cursor()
+    c1.execute("SELECT BOOKNAME,PRICE FROM BOOKS1  WHERE ID ="+getId)
+    r1 = c1.fetchall()
+    print(r1[0][0])
+    if request.method == "POST":
+            getName = request.form["name"]
+            getEmail = request.form["email"]
+            getPhone = request.form["phone"]
+            getAddress = request.form["add"]
+            getPincode = request.form["pin"]
+            getModeofpayment = request.form["payment"]
+
+            print(getName)
+            print(getEmail)
+            print(getPhone)
+            print(getAddress)
+            print(getPincode)
+            print(getModeofpayment)
+
+            con.execute("INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','"+getAddress+"','"+getPincode+"','"+getModeofpayment+"','"+r1[0][0]+"','"+r1[0][1]+"')")
+            print("successfully inserted !")
+            con.commit()
+            if getModeofpayment == "INSTAMOJO":
+                return redirect("/payment")
+
+            if getModeofpayment == "COD":
+                return redirect("/success")
+
+    return render_template("buybooks.html", books=res)
+
+
+'''n = ''
+con.execute("DELETE FROM ORDERSS WHERE NAME = '"+n+"'    ")
+con.commit()
+'''
+
+
+@app.route("/myorders")
+def myorders():
+    cur = con.cursor()
+    cur.execute("SELECT * FROM ORDERSS ")
+    res2 = cur.fetchall()
+    print(res2)
+
+    return render_template("myorders.html", orders=res2)
+
+
+@app.route("/adminlogin", methods=['GET', 'POST'])
+def adminlogin():
+    if request.method == "POST":
+        getname = request.form["name"]
+        getpass = request.form["pass"]
+        if getname == "admin":
+            if getpass == "1234":
+                return redirect("/adminpage")
+    return render_template("adminlogin.html")
+
+
+@app.route("/adminpage")
+def adminpage():
+    return render_template("adminpage.html")
+
+
+@app.route("/adminorder")
+def vieworders():
+    cur = con.cursor()
+    cur.execute("SELECT * FROM ORDERSS")
+    res2 = cur.fetchall()
+    print(res2)
+    return render_template("adminorder.html", orders=res2)
+
+
+@app.route("/sellers")
+def sellers():
+    cur = con.cursor()
+    cur.execute("SELECT * FROM SELLER")
+    res2 = cur.fetchall()
+    print(res2)
+    return render_template("sellers.html", seller=res2)
+
+
+@app.route("/userlogin", methods=['GET', 'POST'])
+def uslogin():
+    if request.method == 'POST':
+        getemail = request.form['email']
+        getpassword = request.form['pass']
+        print(getemail)
+        print(getpassword)
+
+        cursor.execute("SELECT * FROM USERS WHERE EMAILID = '" + getemail + "' AND PASSWORD = '" + getpassword + "'  ")
+        res2 = cursor.fetchall()
+        if len(res2) > 0:
+            return redirect("/myorders")
+
+    return render_template("userlogin.html")
+
+
+@app.route("/userrregistration", methods=['GET', 'POST'])
+def userreg():
+    if request.method == 'POST':
+        getfirstname = request.form['firstname']
+        getlastname = request.form['lastname']
+        getemail = request.form['email']
+        getmobile= request.form['mobile']
+        getpassword = request.form['password']
+
+        print(getfirstname)
+        print(getlastname)
+        print(getmobile)
+        print(getemail)
+        print(getpassword)
+
+        cursor.execute("INSERT INTO USERS(FIRSTNAME,LASTNAME,MOBILENUMBER,EMAILID,PASSWORD)VALUES('"+getfirstname+"','"+getlastname+"','"+getmobile+"','"+getemail+"','"+getpassword+"')")
+        con.commit()
+        return redirect("/userlogin")
+
+    return render_template("userreg.html")
+
+
+@app.route("/payment", methods=['GET', 'POST'])
+def payment():
+    if request.method == 'POST':
+        getnumber = request.form["number"]
+        cur = con.cursor()
+        cur.execute("SELECT * FROM ORDERSS WHERE PHONE = "+getnumber)
+        res = cur.fetchall()
+        print(res)
+        return render_template("payment.html", detail=res)
+
+    return render_template("payment.html")
+
+
+@app.route('/pay', methods=["GET", "POST"])
+def pay():
+    if request.method == "POST":
+        name = request.form["name"]
+        product = request.form["product"]
+        email = request.form["email"]
+        amount = request.form["amount"]
+
+        response = api.payment_request_create(
+            amount=amount,
+            purpose=product,
+            buyer_name=name,
+            send_email=True,
+            email=email,
+            redirect_url="http://localhost:5000/success")
+        return redirect(response['payment_request']['longurl'])
+
+
+@app.route('/success')
+def success():
+    return render_template('success.html')
 
 
 if __name__ == "__main__":

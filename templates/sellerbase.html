@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+  body {
+background-image: url('https://media.istockphoto.com/photos/abstract-blur-blue-gradient-color-background-with-bokeh-round-light-picture-id1310553941?b=1&k=20&m=1310553941&s=170667a&w=0&h=ceXJ-ZDLHlygjY53FQTNp5xpQ9lqRCkjD-RMJGUSvp0=');
+background-repeat: no-repeat;
+background-attachment:fixed;  
+background-size:cover;
+}
+</style>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            
+            <span class="navbar-brand mb-0 h1" href="#">E-Mart</span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="col-lg-6 col-6 text-left">
+              <form method="post" action="/searchpage" class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search for mobiles,grocery items ,etc..."
+                aria-label="Search", name="searchproduct">
+                <button class="btn btn-success" type="submit"> Search </button>
+               </form>
+                
+            </div>
+            <div class="col-lg-3 col-6 text-right">
+              <a href="/sellerlogin" class="btn btn-warning">login</a>
+              <a href="/" class="btn btn-warning">HOME</a>
+              <a href="/logout" class="btn btn-warning">logout</a>
+              <button type="button" class="btn btn-light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                </svg>
+                </button>&emsp;
+            </div>
+        </div>
+    </nav>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <p style="color: rgb(255, 255, 255);">Add/delete products</p>
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  grocery
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="addgro">Add</a></li>
+                  <li><a class="dropdown-item" href="delgro">delete</a></li>
+                </ul>&emsp;
+           
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        mobiles
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="addmob">Add</a></li>
+                        <li><a class="dropdown-item" href="delmob">delete</a></li>
+                      </ul>&emsp;
+                
+                
+
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            electronics
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="addele">Add</a></li>
+                            <li><a class="dropdown-item" href="delele">delete</a></li>
+                          </ul>&emsp;
+
+
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                Home decor
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="adddecor">Add</a></li>
+                                <li><a class="dropdown-item" href="deldecor">delete</a></li>
+                              </ul>&emsp;
+
+
+
+            
+
+                <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  books
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="addbooks">Add</a></li>
+                  <li><a class="dropdown-item" href="delbooks">delete</a></li>
+                </ul>&emsp;
+            </div>
+
+        </div>
+      </nav>
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+        <div class="collapse navbar-collapse " id="navbarNav1">
+          <ul class="nav justify-content-center">
+            <li class="nav-item" style="padding-left: ;">
+              <a class="nav-link align-items-center"  href="/grocery">
+                  <img src="https://d1ralsognjng37.cloudfront.net/e2d27322-3fcb-4467-b896-0c9b00860904.jpeg" alt="Grocery" width="70" height="70">
+                  <br>
+                  <h6>Grocery</h6>
+                  
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse navbar-collapse " id="navbarNav2">
+          <ul class="nav justify-content-center">    
+            <li class="nav-item">
+              <a class="nav-link" href="/mobiles">
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnA9twpwyPtWyl8Ehr5TfLwEaf2u-CGA5lCA&usqp=CAU"  width="70" height="70" >
+                  <br>
+                  <h6>Mobiles</h6>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse navbar-collapse " id="navbarNav3">
+          <ul class="nav justify-content-center">    
+            <li class="nav-item">
+              <a class="nav-link" href="/electronics">
+                  <img src="https://www.pngitem.com/pimgs/m/247-2474633_transparent-electronics-items-png-png-download.png"  width="80" height="70">
+                  <br>
+                  <h6>Electronics</h6>  
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse navbar-collapse " id="navbarNav4">
+          <ul class="nav justify-content-center">    
+            <li class="nav-item">
+              <a class="nav-link" href="/decorate">
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSllza_cqjoV9AZqH7j3j0mhuOu0SSf5NQ19Q&usqp=CAU" width="80" height="70">
+                  <br>
+                  <h6>Home Decor</h6>  
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="collapse navbar-collapse " id="navbarNav6">
+          <ul class="nav justify-content-center">    
+            <li class="nav-item">
+              <a class="nav-link" href="/books" >
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCKZI3BSfyVWKKqumgsnc1OBM2VKxVieABQ55ZBre0dPaNvUKhpeUC2ND-RbG7Spoj6Yc&usqp=CAU"  width="80" height="70">
+                  <br>
+                  <h6>Books</h6>  
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+</body>
+</html>

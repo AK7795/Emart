@@ -1,49 +1,85 @@
-{% extends "base1.html" %}
+{% extends "sellerbase.html" %}
 {% block content %}
-<h1>
-  Emart Adding products Page (SELLER)
-</h1>
+<center><h1>Emart Adding products Page (SELLER)</h1></center>
+<br>
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://i.pinimg.com/originals/30/23/d3/3023d3c1f56aed7652dc1532ad889d5b.png" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="https://www.nobroker.in/blog/wp-content/uploads/2021/07/home-decor-trends.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="https://fndsuk.files.wordpress.com/2020/06/make-a-note-on-consumer-electronics-awesome-things-learn-electronic-appliances-for-home-1024x768-1.jpg?w=1000" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<br><br>
+<div class="container-fluid bg-dark text-light mt-5 pt-5">
+    <div class="row px-xl-5 pt-5">
+        <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+            <a href="" class="text-decoration-none">
+                <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">E</span>Mart</h1>
+            </a>
 
-      <div class="container container">
-          <div class="row ">
-              <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xl-12 col-xxl-12">
-                  <table class="table table-borderless">
-                    <a href="addbooks"><button class="btn btn-success" type="submit">Add books</button></a>&emsp;
-                  
+            <p class="mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path>
+                  </svg>
+                  123 Street </p>
+            <p class="mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"></path>
+                  </svg>
+                  emart@gmail.com
+                </p>
+            <p class="mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"></path>
+                  </svg>
+                +012 345 67890
+            </p>
+        </div>
+        <div class="col-lg-8 col-md-12">
+            <div class="row">
+                <div class="col-md-4 mb-5">
+                    <h5 class="font-weight-bold text-light mb-4">Quick Links</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-light mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
 
-                    <a href="delbooks"><button class="btn btn-success" type="submit">delete books</button></a>&emsp;
-                    
+                    </div>
+                </div>
 
-                    <a href="addele"><button class="btn btn-success" type="submit">Add electronics products</button></a>&emsp;
-                    
 
-                    <a href="delele"><button class="btn btn-success" type="submit">delete electronics </button></a>&emsp;
-                    
+            </div>
+        </div>
 
-                    <a href="addgro"><button class="btn btn-success" type="submit">Add grocery products</button></a>&emsp;
-                    
+    </div>
+    <div class="row border-top border-light mx-xl-5 py-4">
+        <div class="col-md-6 px-xl-0">
+            <p class="mb-md-0 text-center text-md-left text-light">
+                 <a class="text-light font-weight-semi-bold" href="#">E Mart</a>. All Rights Reserved.
 
-                    <a href="delgro"><button class="btn btn-success" type="submit">delete grocery products</button></a>
-                    <br>
-                    <br>
 
-                    <a href="addmob"><button class="btn btn-success" type="submit">Add mobiles</button></a>&emsp;
-                    
+            </p>
+        </div>
 
-                    <a href="delmob"><button class="btn btn-success" type="submit">delete mobiles</button></a>&emsp;
-                    
+    </div>
 
-                    <a href="adddecor"><button class="btn btn-success" type="submit">Add Home decor products</button></a>&emsp;
-                    
+</div>
 
-                    <a href="deldecor"><button class="btn btn-success" type="submit">delete home decor products</button></a>&emsp;
-                    <br>
-                    <br>
-                    
-                  </table>
-              </div>
-          </div>
-      </div>
+
+
 
 
     {% endblock %}

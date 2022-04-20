@@ -1,11 +1,11 @@
-{% extends "base1.html" %}
+{% extends "sellerbase.html" %}
 {% block content %}
-<h1>  Welcome {{session.name}} </h1>
+<h3>  Welcome {{session.name}} </h3>
 <h1>Add mobiles </h1>
 <div class="container container">
     <div class="row">
         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xl-12 col-xxl-12"> 
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 <table class="table table-borderless">
                     <tr>
                         <td>mobile name</td>
@@ -22,6 +22,10 @@
                     <tr>
                         <td>price</td>
                         <td><input name="price" class = "form-control" type="text"> </td>
+                    </tr>
+                    <tr>
+                        <td>add image</td>
+                        <td><input name="mobpic" class = "form-control" type="file" id="mobpic"> </td>
                     </tr>
                     <tr>
                         <td><center><button  class="btn btn-success"type = "submit" >Add</button></center></td>
