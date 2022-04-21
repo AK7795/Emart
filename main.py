@@ -104,6 +104,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+orname=""
+con.execute("DELETE FROM ORDERSS WHERE NAME = '"+orname+"'  ")
+con.commit()
+
 
 @app.route("/")
 def dash():
@@ -341,7 +345,7 @@ def delgro():
 
 
 @app.route("/sellerlogin", methods=['GET', 'POST'])
-def login():
+def sellerlogin():
     if request.method == 'POST':
         getemail = request.form['email']
         getpassword = request.form['pass']
@@ -350,6 +354,7 @@ def login():
 
         cursor.execute("SELECT * FROM SELLER WHERE EMAILID = '" + getemail + "' AND PASSWORD = '" + getpassword + "'  ")
         res2 = cursor.fetchall()
+        print(res2)
         if len(res2) > 0:
             for i in res2:
                 getName = i[1]
@@ -458,7 +463,6 @@ def search():
         cur5.execute("SELECT * FROM MOBILES WHERE NAME LIKE  '%" + sear + "%'  ")
         res5 = cur5.fetchall()
 
-
         if len(res1) > 0:
             return render_template("searchbook.html", searchbook=res1)
 
@@ -477,177 +481,20 @@ def search():
 
 @app.route("/buygrocery", methods=['GET', 'POST'])
 def buygrocery():
-    getId = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM GROCERY WHERE ID=" + getId)
-    res = cur.fetchall()
+    if not session.get("usemail") :
+        return redirect("/userlogin")
+    else:
+        getId = request.args.get('id')
+        cur = con.cursor()
+        cur.execute("SELECT * FROM GROCERY WHERE ID=" + getId)
+        res = cur.fetchall()
 
-    c1 = con.cursor()
-    c1.execute("SELECT ITEMNAME,PRICE FROM GROCERY  WHERE ID =" + getId)
-    r1 = c1.fetchall()
-    print(r1)
-    if request.method == "POST":
-        getName = request.form["bname"]
-        getEmail = request.form["email"]
-        getPhone = request.form["phone"]
-        getAddress = request.form["add"]
-        getPincode = request.form["pin"]
-        getModeofpayment = request.form["payment"]
-
-        print(getName)
-        print(getEmail)
-        print(getPhone)
-        print(getAddress)
-        print(getPincode)
-        print(getModeofpayment)
-
-        con.execute(
-            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
-            r1[0][0] + "','"+r1[0][1]+"')")
-        print("successfully inserted !")
-        con.commit()
-        if getModeofpayment == "INSTAMOJO":
-            return redirect("/payment")
-
-        if getModeofpayment == "COD":
-            return redirect("/success")
-
-    return render_template("buygrocery.html", groc1=res)
-
-
-@app.route("/buymobiles",methods=['GET', 'POST'])
-def buymobiles():
-    getId = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM MOBILES WHERE ID=" + getId)
-    res = cur.fetchall()
-
-    c1 = con.cursor()
-    c1.execute("SELECT NAME,PRICE FROM MOBILES  WHERE ID =" + getId)
-    r1 = c1.fetchall()
-    print(r1[0][0])
-    if request.method == "POST":
-        getName = request.form["name"]
-        getEmail = request.form["email"]
-        getPhone = request.form["phone"]
-        getAddress = request.form["add"]
-        getPincode = request.form["pin"]
-        getModeofpayment = request.form["payment"]
-
-        print(getName)
-        print(getEmail)
-        print(getPhone)
-        print(getAddress)
-        print(getPincode)
-        print(getModeofpayment)
-
-        con.execute(
-            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
-            r1[0][0] + "','"+r1[0][1]+"')")
-        print("successfully inserted !")
-        con.commit()
-        if getModeofpayment == "INSTAMOJO":
-            return redirect("/payment")
-
-        if getModeofpayment == "COD":
-            return redirect("/success")
-
-    return render_template("buymobiles.html", mob1=res)
-
-
-@app.route("/buyelectronics",methods=['GET', 'POST'])
-def buyelectronics():
-    getId = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM ELECTRONICS WHERE ID=" + getId)
-    res = cur.fetchall()
-
-    c1 = con.cursor()
-    c1.execute("SELECT PRODUCTNAME,PRICE FROM ELECTRONICS  WHERE ID =" + getId)
-    r1 = c1.fetchall()
-    print(r1[0][0])
-    if request.method == "POST":
-        getName = request.form["name"]
-        getEmail = request.form["email"]
-        getPhone = request.form["phone"]
-        getAddress = request.form["add"]
-        getPincode = request.form["pin"]
-        getModeofpayment = request.form["payment"]
-
-        print(getName)
-        print(getEmail)
-        print(getPhone)
-        print(getAddress)
-        print(getPincode)
-        print(getModeofpayment)
-
-        con.execute(
-            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
-            r1[0][0] + "'.'"+r1[0][1]+"')")
-        print("successfully inserted !")
-        con.commit()
-        if getModeofpayment == "INSTAMOJO":
-            return redirect("/payment")
-
-        if getModeofpayment == "COD":
-            return redirect("/success")
-
-    return render_template("buyelectronics.html", elec1=res)
-
-
-@app.route("/buydecor",methods=['GET', 'POST'])
-def buydecor():
-    getId = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM HOMEDECOR WHERE ID=" + getId)
-    res = cur.fetchall()
-
-    c1 = con.cursor()
-    c1.execute("SELECT PRODUCTNAME,PRICE FROM HOMEDECOR  WHERE ID =" + getId)
-    r1 = c1.fetchall()
-    print(r1[0][0])
-    if request.method == "POST":
-        getName = request.form["name"]
-        getEmail = request.form["email"]
-        getPhone = request.form["phone"]
-        getAddress = request.form["add"]
-        getPincode = request.form["pin"]
-        getModeofpayment = request.form["payment"]
-
-        print(getName)
-        print(getEmail)
-        print(getPhone)
-        print(getAddress)
-        print(getPincode)
-        print(getModeofpayment)
-
-        con.execute(
-            "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
-            r1[0][0] + "','"+r1[0][1]+"')")
-        print("successfully inserted !")
-        con.commit()
-        if getModeofpayment == "INSTAMOJO":
-            return redirect("/payment")
-
-        if getModeofpayment == "COD":
-            return redirect("/success")
-
-    return render_template("buydecor.html", decor1=res)
-
-
-@app.route("/buybooks", methods=['GET', 'POST'])
-def buybooks():
-    getId = request.args.get('id')
-    cur = con.cursor()
-    cur.execute("SELECT * FROM BOOKS1 WHERE ID=" + getId)
-    res = cur.fetchall()
-
-    c1 = con.cursor()
-    c1.execute("SELECT BOOKNAME,PRICE FROM BOOKS1  WHERE ID ="+getId)
-    r1 = c1.fetchall()
-    print(r1[0][0])
-    if request.method == "POST":
-            getName = request.form["name"]
+        c1 = con.cursor()
+        c1.execute("SELECT ITEMNAME,PRICE FROM GROCERY  WHERE ID =" + getId)
+        r1 = c1.fetchall()
+        print(r1)
+        if request.method == "POST":
+            getName = request.form["bname"]
             getEmail = request.form["email"]
             getPhone = request.form["phone"]
             getAddress = request.form["add"]
@@ -661,7 +508,9 @@ def buybooks():
             print(getPincode)
             print(getModeofpayment)
 
-            con.execute("INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','"+getAddress+"','"+getPincode+"','"+getModeofpayment+"','"+r1[0][0]+"','"+r1[0][1]+"')")
+            con.execute(
+                "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+                r1[0][0] + "','" + r1[0][1] + "')")
             print("successfully inserted !")
             con.commit()
             if getModeofpayment == "INSTAMOJO":
@@ -670,27 +519,199 @@ def buybooks():
             if getModeofpayment == "COD":
                 return redirect("/success")
 
-    return render_template("buybooks.html", books=res)
+        return render_template("buygrocery.html", groc1=res)
 
 
-'''n = ''
-con.execute("DELETE FROM ORDERSS WHERE NAME = '"+n+"'    ")
-con.commit()
-'''
+@app.route("/buymobiles",methods=['GET', 'POST'])
+def buymobiles():
+    if not session.get("usemail") :
+        return redirect("/userlogin")
+    else:
+        getId = request.args.get('id')
+        cur = con.cursor()
+        cur.execute("SELECT * FROM MOBILES WHERE ID=" + getId)
+        res = cur.fetchall()
+
+        c1 = con.cursor()
+        c1.execute("SELECT NAME,PRICE FROM MOBILES  WHERE ID =" + getId)
+        r1 = c1.fetchall()
+        print(r1[0][0])
+        if request.method == "POST":
+            getName = request.form["bname"]
+            getEmail = request.form["email"]
+            getPhone = request.form["phone"]
+            getAddress = request.form["add"]
+            getPincode = request.form["pin"]
+            getModeofpayment = request.form["payment"]
+
+            print(getName)
+            print(getEmail)
+            print(getPhone)
+            print(getAddress)
+            print(getPincode)
+            print(getModeofpayment)
+
+            con.execute(
+                "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+                r1[0][0] + "','" + r1[0][1] + "')")
+            print("successfully inserted !")
+            con.commit()
+            if getModeofpayment == "INSTAMOJO":
+                return redirect("/payment")
+
+            if getModeofpayment == "COD":
+                return redirect("/success")
+
+        return render_template("buymobiles.html", mob1=res)
 
 
-@app.route("/myorders", methods=["GET","POST"])
+@app.route("/buyelectronics",methods=['GET', 'POST'])
+def buyelectronics():
+    if not session.get("usemail") :
+        return redirect("/userlogin")
+    else:
+        getId = request.args.get('id')
+        cur = con.cursor()
+        cur.execute("SELECT * FROM ELECTRONICS WHERE ID=" + getId)
+        res = cur.fetchall()
+
+        c1 = con.cursor()
+        c1.execute("SELECT PRODUCTNAME,PRICE FROM ELECTRONICS  WHERE ID =" + getId)
+        r1 = c1.fetchall()
+        print(r1[0][0])
+        if request.method == "POST":
+            getName = request.form["bname"]
+            getEmail = request.form["email"]
+            getPhone = request.form["phone"]
+            getAddress = request.form["add"]
+            getPincode = request.form["pin"]
+            getModeofpayment = request.form["payment"]
+
+            print(getName)
+            print(getEmail)
+            print(getPhone)
+            print(getAddress)
+            print(getPincode)
+            print(getModeofpayment)
+
+            con.execute(
+                "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+                r1[0][0] + "'.'" + r1[0][1] + "')")
+            print("successfully inserted !")
+            con.commit()
+            if getModeofpayment == "INSTAMOJO":
+                return redirect("/payment")
+
+            if getModeofpayment == "COD":
+                return redirect("/success")
+
+        return render_template("buyelectronics.html", elec1=res)
+
+
+@app.route("/buydecor",methods=['GET', 'POST'])
+def buydecor():
+    if not session.get("usemail") :
+        return redirect("/userlogin")
+    else:
+        getId = request.args.get('id')
+        cur = con.cursor()
+        cur.execute("SELECT * FROM HOMEDECOR WHERE ID=" + getId)
+        res = cur.fetchall()
+
+        c1 = con.cursor()
+        c1.execute("SELECT PRODUCTNAME,PRICE FROM HOMEDECOR  WHERE ID =" + getId)
+        r1 = c1.fetchall()
+        print(r1[0][0])
+        if request.method == "POST":
+            getName = request.form["bname"]
+            getEmail = request.form["email"]
+            getPhone = request.form["phone"]
+            getAddress = request.form["add"]
+            getPincode = request.form["pin"]
+            getModeofpayment = request.form["payment"]
+
+            print(getName)
+            print(getEmail)
+            print(getPhone)
+            print(getAddress)
+            print(getPincode)
+            print(getModeofpayment)
+
+            con.execute(
+                "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+                r1[0][0] + "','" + r1[0][1] + "')")
+            print("successfully inserted !")
+            con.commit()
+            if getModeofpayment == "INSTAMOJO":
+                return redirect("/payment")
+
+            if getModeofpayment == "COD":
+                return redirect("/success")
+
+        return render_template("buydecor.html", decor1=res)
+
+
+@app.route("/buybooks", methods=['GET', 'POST'])
+def buybooks():
+    if not session.get("usemail") :
+        return redirect("/userlogin")
+    else:
+        getId = request.args.get('id')
+        cur = con.cursor()
+        cur.execute("SELECT * FROM BOOKS1 WHERE ID=" + getId)
+        res = cur.fetchall()
+
+        c1 = con.cursor()
+        c1.execute("SELECT BOOKNAME,PRICE FROM BOOKS1  WHERE ID =" + getId)
+        r1 = c1.fetchall()
+        print(r1[0][0])
+        if request.method == "POST":
+            getName = request.form["bname"]
+            getEmail = request.form["email"]
+            getPhone = request.form["phone"]
+            getAddress = request.form["add"]
+            getPincode = request.form["pin"]
+            getModeofpayment = request.form["payment"]
+
+            print(getName)
+            print(getEmail)
+            print(getPhone)
+            print(getAddress)
+            print(getPincode)
+            print(getModeofpayment)
+
+            con.execute(
+                "INSERT INTO ORDERSS(NAME,EMAIL,PHONE,ADDRESS,PINCODE,MODEOFPAYMENT,ITEMORDERED,AMOUNT) VALUES('" + getName + "','" + getEmail + "','" + getPhone + "','" + getAddress + "','" + getPincode + "','" + getModeofpayment + "','" +
+                r1[0][0] + "','" + r1[0][1] + "')")
+            print("successfully inserted !")
+            con.commit()
+            if getModeofpayment == "INSTAMOJO":
+                return redirect("/payment")
+
+            if getModeofpayment == "COD":
+                return redirect("/success")
+
+        return render_template("buybooks.html", books=res)
+
+
+@app.route("/sellerorders", methods=["GET","POST"])
+def userorder():
+
+    cur = con.cursor()
+    cur.execute("SELECT * FROM ORDERSS ")
+    res = cur.fetchall()
+    print(res)
+    return render_template("myorders.html", detail=res)
+
+
+@app.route("/userorders", methods=["GET","POST"])
 def myorder():
 
-    if request.method == 'POST':
-        getnumber = request.form["number"]
-        cur = con.cursor()
-        cur.execute("SELECT * FROM ORDERSS WHERE PHONE = "+getnumber)
-        res = cur.fetchall()
-        print(res)
-        return render_template("myorders.html", detail=res)
-
-    return render_template("myorders.html")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM ORDERSS ")
+    res = cur.fetchall()
+    print(res)
+    return render_template("userorder.html", detail=res)
 
 
 @app.route("/adminlogin", methods=['GET', 'POST'])
@@ -727,6 +748,36 @@ def sellers():
     return render_template("sellers.html", seller=res2)
 
 
+@app.route("/users")
+def adminviewusers():
+    cur = con.cursor()
+    cur.execute("SELECT * FROM USERS")
+    res = cur.fetchall()
+    return render_template("allusers.html", us=res)
+
+
+@app.route("/delsel", methods=["GET","POST"])
+def delseller():
+    if request.method == "POST":
+        getemailid = request.form["email"]
+        cur3 = con.cursor()
+        cur3.execute("DELETE FROM SELLER WHERE EMAILID = '" + getemailid + "' ")
+        con.commit()
+        return redirect("/sellers")
+    return render_template("delsel.html")
+
+
+@app.route("/deluser", methods=["GET","POST"])
+def deluser():
+    if request.method == "POST":
+        getemailid = request.form["email"]
+        cur3 = con.cursor()
+        cur3.execute("DELETE FROM USERS WHERE EMAILID = '" + getemailid + "' ")
+        con.commit()
+        return redirect("/users")
+    return render_template("deluser.html")
+
+
 @app.route("/userlogin", methods=['GET', 'POST'])
 def uslogin():
     if request.method == 'POST':
@@ -737,15 +788,69 @@ def uslogin():
 
         cursor.execute("SELECT * FROM USERS WHERE EMAILID = '" + getemail + "' AND PASSWORD = '" + getpassword + "'  ")
         res2 = cursor.fetchall()
+        print(res2)
         if len(res2) > 0:
+            for i in res2:
+                getusid = i[0]
+                getusName = i[1]
+                getusnum = i[3]
+                getusemail = i[4]
+
+            print(getemail)
+            session["usname"] = getusName
+            session["usid"] = getusid
+            session["usnum"] = getusnum
+            session["usemail"] = getusemail
+
             return redirect("/userpage")
 
     return render_template("userlogin.html")
 
 
+@app.route("/userlogout")
+def uslogout():
+
+    if not session.get("usemail"):
+        return redirect("/")
+    else:
+        session["usname"] = None
+        session["usemail"] = None
+        session["usnum"] = None
+        return redirect("/")
+
+
 @app.route("/userpage")
 def userpage():
-    return render_template("user.html")
+    if not session.get("usemail"):
+        return redirect("/userlogin")
+    else:
+        return render_template("user.html")
+
+
+@app.route("/editprofile", methods=['GET', 'POST'])
+def editprofile():
+    if not session.get("usemail"):
+        return redirect("/userlogin")
+    else:
+        if request.method == 'POST':
+            getfirstname = request.form['firstname']
+            getlastname = request.form['lastname']
+            getemail = request.form['email']
+            getmobile = request.form['mobile']
+            getpassword = request.form['password']
+
+            print(getfirstname)
+            print(getlastname)
+            print(getmobile)
+            print(getemail)
+            print(getpassword)
+
+            cursor.execute(
+                "UPDATE  USERS SET FIRSTNAME = '" + getfirstname + "',LASTNAME = '" + getlastname + "', MOBILENUMBER = '" + getmobile + "', EMAILID = '" + getemail + "',PASSWORD = '" + getpassword + "'      WHERE FIRSTNAME = '"+session["usname"]+"'  ")
+            con.commit()
+            return redirect("/")
+
+        return render_template("editprofile.html")
 
 
 @app.route("/userrregistration", methods=['GET', 'POST'])
@@ -772,24 +877,26 @@ def userreg():
 
 @app.route("/payment", methods=['GET', 'POST'])
 def payment():
-    if request.method == 'POST':
-        getnumber = request.form["number"]
+    if not session.get("usemail"):
+        return redirect("/userlogin")
+    else:
         cur = con.cursor()
-        cur.execute("SELECT * FROM ORDERSS WHERE PHONE = "+getnumber)
+        cur.execute("SELECT * FROM ORDERSS WHERE EMAIL = '" + session["usemail"] + "' ")
         res = cur.fetchall()
         print(res)
         return render_template("payment.html", detail=res)
 
-    return render_template("payment.html")
+
+        return render_template("payment.html")
 
 
 @app.route('/pay', methods=["GET", "POST"])
 def pay():
-    if request.method == "POST":
-        name = request.form["name"]
-        product = request.form["product"]
-        email = request.form["email"]
-        amount = request.form["amount"]
+    if request.method == 'POST':
+        name = request.form.get('name')
+        product = request.form.get('product')
+        email = request.form.get('email')
+        amount = request.form.get('amount')
 
         response = api.payment_request_create(
             amount=amount,

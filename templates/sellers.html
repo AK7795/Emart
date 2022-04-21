@@ -1,6 +1,30 @@
 
 {% extends "base1.html" %}
 {% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-light">
+    <div class="container-fluid">
+        <p>Admin options</p>
+        <div class="btn-group">
+            <a class="btn btn-success" href="adminorder"> View orders</a>&emsp;
+            <a class="btn btn-success" href="sellers"> View sellers</a>&emsp;
+            <a class="btn btn-success" href="users"> View users</a>&emsp;
+            
+        </div>
+
+    </div>
+  </nav>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <p style="color: aliceblue;">delete seller</p>
+        <div class="btn-group">
+            <a class="btn btn-success" href="delsel"> delete seller</a>&emsp;
+        
+        </div>
+
+    </div>
+  </nav>
+
 <h2>Seller details </h2>
 <div class="container" style="color: rgb(0, 0, 0);">
     <div class="row">
@@ -11,9 +35,10 @@
                     <tr>
                         <th scope="col"> first name</th>
                         <th scope="col"> last name</th>
-                        <th scope="col">email id</th>
+                        
                         <th scope="col">phone no</th>
-                        <th scope="col">address</th>
+                        <th scope="col">email id</th>
+                        <th scope="col">password</th>
 
                         
                     </tr>
@@ -25,7 +50,7 @@
                             <td>{{i[2]}}</td>
                             <td>{{i[3]}}</td>
                             <td>{{i[4]}}</td>
-                            <td>{{i[4]}}</td>
+                            <td>{{i[5]}}</td>
 
                     </tr>
                     {% endfor %}

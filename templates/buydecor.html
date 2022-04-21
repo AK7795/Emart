@@ -32,44 +32,44 @@
         <table class="table table-borderless">
             <tr>
                 <td>Name</td>
-                <td><input name="name" class = "form-control" type="text"> </td>
+                <td><input name="bname" class = "form-control" type="text" value="{{session.usname}}"> </td>
             </tr>
             <tr>
                 <td>Email</td>
-                <td><input name="email" class = "form-control" type="text"> </td>
+                <td><input name="email" class = "form-control" type="text" value="{{session.usemail}}"> </td>
             </tr>
             <tr>
                 <td>Phone</td>
-                <td><input name="phone" class = "form-control" type="number"> </td>
+                <td><input name="phone" class = "form-control" type="text" value="{{session.usnum}}"> </td>
             </tr>
             <tr>
                 <td>Address</td>
-                <td><input name="add" class="form-control" type="text"></td>
+                <td><input name="add" class="form-control" type="text" value="XYZ STREET ABC CITY"></td>
 
             </tr>
             <tr>
                 <td>Pincode</td>
-                <td><input name="pin" class="form-control" type="number"></td>
+                <td><input name="pin" class="form-control" type="number" value="560001"></td>
             </tr>
             
             <tr>
-                <td>
-                  <label for="payment">Choose payment method :</label>
-                  <select name="payment" id="payment">
-                    
-                    
-                    <option value="COD">COD</option>
-                    <option value="INSTAMOJO">INSTAMOJO</option>
-                  </select>
-                </td>
-                
-              </tr>
-
-              <tr>
-                <td><a ><button  class="btn btn-success" type = "submit" >confirm</button></a></td>
+              <td>
+                <label for="payment">Choose payment method :</label>
+                <select name="payment" id="payment">
+                  
+                  
+                  <option value="COD">COD</option>
+                  <option value="INSTAMOJO">INSTAMOJO</option>
+                </select>
+              </td>
+              
             </tr>
-            </table>
-    </form>
+
+            <tr>
+              <td><a ><button  class="btn btn-success" type = "submit" >confirm</button></a></td>
+          </tr>
+        </table>
+      </form>
 
       {% endfor %}
   </div>

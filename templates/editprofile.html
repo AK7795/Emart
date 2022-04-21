@@ -1,0 +1,50 @@
+{% extends "base1.html" %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-light">
+  <div class="container-fluid">
+      <p>User options</p>
+      <div class="btn-group">
+          <a class="btn btn-success" href="userorders"> View orders</a>&emsp;
+          <a class="btn btn-success" href="editprofile"> edit profile</a>&emsp;
+
+      </div>
+
+  </div>
+</nav>
+    <h1>USER  edit profile</h1>
+        <div class="container container">
+          <div class="row">
+              <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xl-12 col-xxl-12"> 
+                <form action="" method="post"> 
+                    <table class="table table-borderless">
+                          <tr>
+                            <td>new first name</td>
+                            <td><input name="firstname" class = "form-control" type="text"> </td>
+                          </tr>
+                          <tr>
+                            <td> new last name</td>
+                            <td><input name="lastname" class = "form-control" type="text"> </td>
+                          </tr>
+                          <tr>
+                            <td> new email</td>
+                              <td><input name="email" class = "form-control" type="text"> </td>
+                          </tr>
+                          <tr>
+                            <td> new mobile number</td>
+                            <td><input name="mobile" class = "form-control" type="text"> </td>
+                          </tr>
+
+                          <tr>
+                            <td> new password</td>
+                            <td><input name="password" class = "form-control" type="password"> </td>
+                          </tr>
+                          <tr>
+                            <td><button  class="btn btn-success"type = "submit" >Update details</button></td>
+                          </tr>
+                      </table>    
+                </form>
+              </div>
+          </div>
+        </div>
+        
+        {% endblock %}
